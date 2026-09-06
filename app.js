@@ -242,7 +242,7 @@ async function githubGetFile(cfg) {
   if (r.status === 404) return null;
   if (!r.ok) {
     let m = "HTTP " + r.status;
-    try { const j = await r.json(); m = j.message || m; } catch (e) {}
+    try { const j = await r.json(); if (j && j.message) m = j.message + " (HTTP " + r.status + ")"; } catch (e) {}
     throw new Error(m);
   }
   const j = await r.json();
@@ -260,7 +260,7 @@ async function githubPutFile(cfg, sha, text) {
   });
   if (!r.ok) {
     let m = "HTTP " + r.status;
-    try { const j = await r.json(); m = j.message || m; } catch (e) {}
+    try { const j = await r.json(); if (j && j.message) m = j.message + " (HTTP " + r.status + ")"; } catch (e) {}
     throw new Error(m);
   }
 }
@@ -285,7 +285,7 @@ async function syncNow(resetDom) {
         await githubPutFile(cfg, remote ? remote.sha : null, payload);
         break;
       } catch (e) {
-        if (attempt === 0 && /409|sha|conflict/i.test(e.message || "")) {
+        if (attempt === 0 && /409|conflict|does not match/i.test(e.message || "")) {
           remote = await githubGetFile(cfg);
           continue;
         }
