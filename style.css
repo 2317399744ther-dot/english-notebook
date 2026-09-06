@@ -151,6 +151,35 @@ body {
 .sheet-item.danger { color: var(--danger); }
 #importJsonFile { display: none; }
 
+/* ---------- 云同步面板 ---------- */
+.modal-panel {
+  position: relative; background: var(--paper); width: 100%; max-width: 680px;
+  border-radius: 20px 20px 0 0; padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height: 92vh; overflow-y: auto;
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.modal-head h2 { margin: 0; font-size: 18px; font-weight: 700; }
+.modal-head .round-btn { background: var(--bg); color: var(--text); }
+.modal-panel label { display: block; margin-bottom: 14px; font-size: 13px; color: var(--muted); font-weight: 600; }
+.modal-panel input {
+  width: 100%; margin-top: 6px; padding: 12px 14px; font-size: 16px;
+  border: 0.5px solid var(--line-strong); border-radius: 12px; outline: none; background: #fff; color: var(--text);
+}
+.modal-panel input:focus { border-color: var(--text); box-shadow: 0 0 0 3px rgba(0,0,0,.06); }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); font-weight: 500 !important; }
+.check input { width: auto; margin: 0; }
+.hint { font-size: 13px; color: var(--muted); margin: 0 0 14px; line-height: 1.6; }
+.hint code { background: var(--bg); padding: 1px 6px; border-radius: 6px; }
+.sync-status { font-size: 13px; color: var(--muted); margin: 10px 0; min-height: 18px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: none; border-radius: 12px; padding: 13px 20px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity .15s;
+}
+.btn:active { opacity: .6; }
+.btn-primary { background: var(--ink); color: #fff; }
+
 /* ---------- 提示 ---------- */
 .toast {
   position: fixed; left: 50%; bottom: calc(34px + env(safe-area-inset-bottom)); transform: translateX(-50%);
@@ -165,4 +194,5 @@ body {
   .notebook { margin-top: 28px; }
   .modal { align-items: center; padding: 24px; }
   .sheet { border-radius: 20px; }
+  .modal-panel { border-radius: 20px; }
 }
