@@ -265,13 +265,18 @@ async function githubPutFile(cfg, sha, text) {
   }
 }
 
+let syncing = false;
+let syncQueued = false;
+
 async function syncNow(resetDom) {
   const cfg = getSyncConfig();
   if (!cfg.token) { openSync(); setSyncStatus("请先填写 GitHub Token"); return; }
-  setSyncStatus("同步中…");
+  if (syncing) { syncQueued = true; return; }
+  syncing = true;
   try {
+    setSyncStatus("同步中…");
     let remote = await githubGetFile(cfg);
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 3; attempt++) {
       let remotePages = {};
       if (remote) {
         const data = JSON.parse(b64ToUtf8(remote.content));
@@ -285,7 +290,7 @@ async function syncNow(resetDom) {
         await githubPutFile(cfg, remote ? remote.sha : null, payload);
         break;
       } catch (e) {
-        if (attempt === 0 && /409|conflict|does not match/i.test(e.message || "")) {
+        if (attempt < 2 && /409|conflict|does not match/i.test(e.message || "")) {
           remote = await githubGetFile(cfg);
           continue;
         }
@@ -303,6 +308,9 @@ async function syncNow(resetDom) {
   } catch (e) {
     setSyncStatus("同步失败：" + (e && e.message ? e.message : "网络错误"));
     if (resetDom) toast("同步失败");
+  } finally {
+    syncing = false;
+    if (syncQueued) { syncQueued = false; syncNow(resetDom); }
   }
 }
 
