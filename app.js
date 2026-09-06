@@ -211,6 +211,8 @@ function closeSync() {
   $("#syncModal").classList.add("hidden");
 }
 
+function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
 function utf8ToB64(str) {
   const bytes = new TextEncoder().encode(str);
   let bin = "";
@@ -237,8 +239,8 @@ function mergePages(a, b) {
 }
 
 async function githubGetFile(cfg) {
-  const url = "https://api.github.com/repos/" + cfg.repo + "/contents/" + cfg.path + "?ref=" + cfg.branch;
-  const r = await fetch(url, { headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" } });
+  const url = "https://api.github.com/repos/" + cfg.repo + "/contents/" + cfg.path + "?ref=" + cfg.branch + "&_=" + Date.now();
+  const r = await fetch(url, { headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json" }, cache: "no-store" });
   if (r.status === 404) return null;
   if (!r.ok) {
     let m = "HTTP " + r.status;
@@ -257,6 +259,7 @@ async function githubPutFile(cfg, sha, text) {
     method: "PUT",
     headers: { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    cache: "no-store",
   });
   if (!r.ok) {
     let m = "HTTP " + r.status;
@@ -291,6 +294,7 @@ async function syncNow(resetDom) {
         break;
       } catch (e) {
         if (attempt < 2 && /409|conflict|does not match/i.test(e.message || "")) {
+          await sleep(300);
           remote = await githubGetFile(cfg);
           continue;
         }
