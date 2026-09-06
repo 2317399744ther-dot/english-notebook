@@ -1,0 +1,168 @@
+:root {
+  --ink: #111111;
+  --ink-soft: #3a3a3c;
+  --paper: #ffffff;
+  --paper-2: #fafafa;
+  --line: #e5e5ea;
+  --line-strong: #d1d1d6;
+  --text: #1d1d1f;
+  --muted: #8e8e93;
+  --bg: #f5f5f7;
+  --danger: #ff3b30;
+  --shadow: 0 1px 3px rgba(0,0,0,.04), 0 10px 32px rgba(0,0,0,.08);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+.notebook {
+  max-width: 680px;
+  margin: 0 auto;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
+}
+
+/* ---------- 活页环 ---------- */
+.binding {
+  height: 22px;
+  background:
+    radial-gradient(circle 6px at 14px 50%, var(--paper) 0 50%, #e5e5ea 55% 72%, #c7c7cc 75% 100%);
+  background-size: 28px 22px;
+  background-repeat: repeat-x;
+  background-color: #f2f2f7;
+}
+
+/* ---------- 顶部 ---------- */
+.cover {
+  background: var(--paper);
+  color: var(--text);
+  padding: 18px 20px 16px;
+  border-bottom: 0.5px solid var(--line);
+}
+.cover-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cover-title h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+.cover-title p { margin: 3px 0 0; font-size: 12px; color: var(--muted); }
+
+.round-btn {
+  width: 38px; height: 38px; flex: 0 0 auto; border: none; border-radius: 50%;
+  background: var(--bg); color: var(--text); font-size: 19px; line-height: 1;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: opacity .15s;
+}
+.round-btn:active { opacity: .5; }
+
+/* ---------- 日期翻页 ---------- */
+.date-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 18px; }
+.nav-btn {
+  width: 42px; height: 42px; border: none; border-radius: 50%;
+  background: var(--bg); color: var(--text); font-size: 26px; line-height: 1;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: opacity .15s; flex: 0 0 auto;
+}
+.nav-btn:active { opacity: .5; }
+.nav-btn:disabled { opacity: .25; cursor: default; }
+.date-label {
+  flex: 1; border: none; background: transparent; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; color: var(--text);
+}
+#dateMain { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+#dateWeek { font-size: 12px; color: var(--muted); }
+
+/* ---------- 格式工具栏 ---------- */
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 16px;
+  background: var(--bg); border-radius: 12px; padding: 5px;
+}
+.tb-btn {
+  border: none; background: transparent; color: var(--text); font-size: 13px;
+  padding: 7px 11px; border-radius: 9px; cursor: pointer; min-width: 30px;
+  white-space: nowrap; transition: background .12s, color .12s;
+}
+.tb-btn:active { background: #e9e9eb; }
+.tb-btn.active { background: var(--ink); color: #fff; }
+.tb-sep { width: 0.5px; height: 20px; background: var(--line-strong); margin: 0 3px; }
+
+/* ---------- 纸页 ---------- */
+.paper {
+  position: relative;
+  min-height: 62vh;
+  padding: 10px 20px 48px;
+  background: var(--paper);
+}
+
+#page { outline: none; min-height: 55vh; position: relative; }
+#page[data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: #c7c7cc;
+  position: absolute; left: 6px; top: 14px; pointer-events: none;
+  font-size: 16px;
+}
+#page > p,
+#page > div {
+  margin: 0;
+  padding: 12px 4px;
+  border-bottom: 0.5px solid var(--line);
+  font-size: 16px;
+  line-height: 1.65;
+}
+#page h2 {
+  margin: 8px 0 0; padding: 10px 4px;
+  color: var(--text); font-size: 21px; font-weight: 700;
+  border-bottom: 0.5px solid var(--line);
+}
+#page ul, #page ol { margin: 0; padding: 4px 4px 4px 30px; }
+#page li { padding: 8px 2px; border-bottom: 0.5px solid var(--line); font-size: 16px; line-height: 1.6; }
+
+/* ---------- 翻页动画 ---------- */
+@keyframes turn-next { from { opacity: 0; transform: translateX(36px); } to { opacity: 1; transform: none; } }
+@keyframes turn-prev { from { opacity: 0; transform: translateX(-36px); } to { opacity: 1; transform: none; } }
+.turn-next { animation: turn-next .22s ease; }
+.turn-prev { animation: turn-prev .22s ease; }
+
+/* ---------- 更多菜单 ---------- */
+.modal { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+.modal-backdrop { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,.4); }
+.sheet {
+  position: relative; background: var(--paper); width: 100%; max-width: 680px;
+  border-radius: 20px 20px 0 0; padding: 8px 12px calc(12px + env(safe-area-inset-bottom));
+}
+.sheet-head { text-align: center; color: var(--muted); font-size: 13px; padding: 10px 0 14px; }
+.sheet-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  border: none; background: var(--bg); color: var(--text); text-align: left;
+  padding: 15px 16px; margin-bottom: 8px; border-radius: 14px; font-size: 16px;
+  cursor: pointer; transition: opacity .15s;
+}
+.sheet-item span { font-size: 18px; }
+.sheet-item:active { opacity: .6; }
+.sheet-item.danger { color: var(--danger); }
+#importJsonFile { display: none; }
+
+/* ---------- 提示 ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(34px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  background: rgba(0,0,0,.85); color: #fff; padding: 11px 18px; border-radius: 999px; font-size: 14px;
+  z-index: 100; max-width: 86vw; text-align: center;
+}
+
+.hidden { display: none !important; }
+
+/* ---------- 桌面 ---------- */
+@media (min-width: 640px) {
+  .notebook { margin-top: 28px; }
+  .modal { align-items: center; padding: 24px; }
+  .sheet { border-radius: 20px; }
+}
