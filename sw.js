@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "english-notebook-v7";
+const CACHE = "english-notebook-v8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -27,19 +27,19 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+/* 网络优先：在线时始终拉最新，离线时回退缓存 */
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req).then((res) => {
-        const copy = res.clone();
-        if (res.ok && (req.url.startsWith(self.location.origin))) {
-          caches.open(CACHE).then((cache) => cache.put(req, copy));
-        }
-        return res;
-      }).catch(() => caches.match("./index.html"));
-    })
+    fetch(req).then((res) => {
+      const copy = res.clone();
+      if (res.ok && req.url.startsWith(self.location.origin)) {
+        caches.open(CACHE).then((cache) => cache.put(req, copy));
+      }
+      return res;
+    }).catch(() =>
+      caches.match(req).then((cached) => cached || caches.match("./index.html"))
+    )
   );
 });
