@@ -61,11 +61,35 @@
     <div class="modal-backdrop" id="moreBackdrop"></div>
     <div class="sheet">
       <div class="sheet-head">更多</div>
+      <button class="sheet-item" data-action="sync" type="button"><span>☁️</span>云同步</button>
       <button class="sheet-item" data-action="exportdoc" type="button"><span>📤</span>导出 Word 文档</button>
       <button class="sheet-item" data-action="exportjson" type="button"><span>💾</span>导出备份</button>
       <label class="sheet-item" for="importJsonFile" type="button"><span>📥</span>导入备份</label>
       <input id="importJsonFile" type="file" accept=".json,application/json" hidden />
       <button class="sheet-item danger" data-action="clear" type="button"><span>🗑️</span>清空全部</button>
+    </div>
+  </div>
+
+  <!-- 云同步设置 -->
+  <div class="modal hidden" id="syncModal">
+    <div class="modal-backdrop" id="syncBackdrop"></div>
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h2>云同步</h2>
+        <button class="round-btn" id="btnCloseSync" type="button">✕</button>
+      </div>
+      <p class="hint">笔记会保存到 GitHub 仓库里的 <code>data/notes.json</code>。两台设备填同一个仓库和 Token，即可自动共享。</p>
+      <label>GitHub Token
+        <input id="syncToken" type="password" placeholder="github_pat_... 或 ghp_..." autocomplete="off" />
+      </label>
+      <label>仓库（用户名/仓库名）
+        <input id="syncRepo" type="text" placeholder="用户名/english-notebook" autocomplete="off" />
+      </label>
+      <label class="check"><input id="syncAuto" type="checkbox" checked /> 编辑后自动同步</label>
+      <div class="sync-status" id="syncStatus"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="btnSyncNow">立即同步</button>
+      </div>
     </div>
   </div>
 
