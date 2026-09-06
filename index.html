@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>英语笔记本</title>
+  <meta name="description" content="纯净的英语笔记：按日期分页、可直接书写、自动保存。" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="英语笔记本" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="notebook">
+    <div class="binding"></div>
+
+    <header class="cover">
+      <div class="cover-top">
+        <div class="cover-title">
+          <h1>英语笔记本</h1>
+          <p id="coverSub">—</p>
+        </div>
+        <button class="round-btn" id="btnMore" type="button" title="更多">⋯</button>
+      </div>
+
+      <div class="date-nav">
+        <button class="nav-btn" id="btnPrev" type="button" title="上一页">‹</button>
+        <button class="date-label" id="btnToday" type="button" title="回到今天">
+          <span id="dateMain">今天</span>
+          <span id="dateWeek"></span>
+        </button>
+        <button class="nav-btn" id="btnNext" type="button" title="下一页">›</button>
+      </div>
+
+      <div class="toolbar" id="toolbar">
+        <button class="tb-btn" data-cmd="bold" type="button" title="加粗"><b>B</b></button>
+        <button class="tb-btn" data-cmd="italic" type="button" title="斜体"><i>I</i></button>
+        <button class="tb-btn" data-cmd="underline" type="button" title="下划线"><u>U</u></button>
+        <button class="tb-btn" data-cmd="strikeThrough" type="button" title="删除线"><s>S</s></button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" data-cmd="insertUnorderedList" type="button" title="项目符号">• 列表</button>
+        <button class="tb-btn" data-cmd="insertOrderedList" type="button" title="编号列表">1. 列表</button>
+        <button class="tb-btn" data-cmd="formatBlock" data-val="H2" type="button" title="标题">标题</button>
+        <span class="tb-sep"></span>
+        <button class="tb-btn" data-cmd="removeFormat" type="button" title="清除格式">清除</button>
+      </div>
+    </header>
+
+    <div class="paper">
+      <div id="page" contenteditable="true" spellcheck="false"
+           data-placeholder="点击这里，像在纸上写字一样开始…"></div>
+    </div>
+  </div>
+
+  <!-- 更多菜单 -->
+  <div class="modal hidden" id="moreModal">
+    <div class="modal-backdrop" id="moreBackdrop"></div>
+    <div class="sheet">
+      <div class="sheet-head">更多</div>
+      <button class="sheet-item" data-action="exportdoc" type="button"><span>📤</span>导出 Word 文档</button>
+      <button class="sheet-item" data-action="exportjson" type="button"><span>💾</span>导出备份</button>
+      <label class="sheet-item" for="importJsonFile" type="button"><span>📥</span>导入备份</label>
+      <input id="importJsonFile" type="file" accept=".json,application/json" hidden />
+      <button class="sheet-item danger" data-action="clear" type="button"><span>🗑️</span>清空全部</button>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
