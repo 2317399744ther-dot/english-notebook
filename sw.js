@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE = "english-notebook-v6";
+const CACHE = "english-notebook-v7";
 const ASSETS = [
   "./",
   "./index.html",
